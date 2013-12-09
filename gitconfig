@@ -1,0 +1,19 @@
+[user]
+	name = Bernardo Galindo
+	email = bernardo466@gmail.com
+[init]
+	templatedir = ~/.git
+[alias]
+	ctags = !.git/hooks/ctags
+	mylog = log --pretty=format:'%h %s [%an]' --graph
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+[color]
+	ui = true
+[core]
+	editor = /usr/bin/vim -f
+[web]
+	browser = open
