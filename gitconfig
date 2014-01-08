@@ -15,5 +15,6 @@
 	ui = true
 [core]
 	editor = /usr/bin/vim -f
+	excludesfile = /Users/bernardogalindo/.gitignore
 [web]
 	browser = open

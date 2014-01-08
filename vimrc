@@ -36,11 +36,12 @@ Bundle 'tpope/vim-pathogen'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-rake'
+Bundle 'tpope/vim-unimpaired'
 Bundle 'kien/ctrlp.vim.git'
 Bundle 'rking/ag.vim.git'
-Bundle 'itchyny/lightline.vim.git'
 Bundle 'airblade/vim-gitgutter.git'
 Bundle 'scrooloose/nerdtree.git'
+Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
 " Brief help
@@ -67,8 +68,12 @@ autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 autocmd vimenter * if !argc() | NERDTree | endif
 " stick to vim closes if close
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q
-
+"Auto-clean fugitive buffers
+autocmd BufReadPost fugitive://* set bufhidden=delete
 " Enable omnicompletion (to use, hold Ctrl+X then Ctrl+O while in Insert mode.
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Theme/Colors                                                           "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -85,6 +90,8 @@ autocmd BufRead,BufNewFile Vagrantfile set filetype=ruby
 
 " Highlight characters that go over 80 columns
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+highlight CursorLine ctermfg=NONE ctermbg=240 cterm=NONE guifg=NONE guibg=#2e373b gui=NONE
+
 match OverLength /\%81v.\+/
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -92,7 +99,6 @@ match OverLength /\%81v.\+/
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set number                " show line numbers
 set cul                   " highlight current line
-set laststatus=2          " last window always has a statusline
 set hlsearch              " Don't continue to highlight searched phrases.
 set incsearch             " But do highlight as you type your search.
 set ignorecase            " Make searches case-insensitive.
@@ -100,8 +106,22 @@ set ruler                 " Always show info along bottom.
 set smartcase             " ... unless they contain at least one capital letter
 set showmatch
 set vb                    " enable visual bell
-set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
-let g:NERDTreeWinPos = "right"
+set laststatus=2          " last window always has a statusline
+"if has('statusline')
+"  set laststatus=2          " last window always has a statusline
+"  set statusline=%<%f\    " Filename
+"  set statusline+=%w%h%m%r " Options
+"  set statusline+=%{fugitive#statusline()} "  Git Hotness
+"  set statusline+=\ [%{&ff}/%Y]            " filetype
+"  set statusline+=\ [%{getcwd()}]          " current dir
+"  set statusline+=%#warningmsg#
+"  set statusline+=%{SyntasticStatuslineFlag()}
+"  set statusline+=%*
+"  let g:syntastic_enable_signs=1
+"  set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+"endif
+"set statusline=%{fugitive#statusline()}\
+"set statusline+=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\ \ \ %h%m%r%{fugitive#statusline()}%=%-40.(%l,%c%V%)\ %P
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 05. Mapping                                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -124,7 +144,7 @@ let g:ctrlp_cmd = 'CtrlP'
 " 06. Text Formatting/Layout                                                 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent            " auto-indent
-set encoding=utf-8    " enconding with utf-8
+set encoding=utf-8        " enconding with utf-8
 set tabstop=2             " tab spacing
 set softtabstop=2         " unify
 set shiftwidth=2         " indent/outdent by 2 columns
@@ -133,7 +153,7 @@ set expandtab             " use spaces instead of tabs
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 set nowrap                " don't wrap text
 set backspace=indent,eol,start
-set guifont=Monaco:h12
+set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 set textwidth=79
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrlp set up                                                              "
