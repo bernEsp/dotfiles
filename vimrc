@@ -71,6 +71,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "Auto-clean fugitive buffers
 autocmd BufReadPost fugitive://* set bufhidden=delete
 " Enable omnicompletion (to use, hold Ctrl+X then Ctrl+O while in Insert mode.
+python import sys; sys.path.append("/usr/local/lib/python2.7/site-packages")
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
