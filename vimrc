@@ -44,6 +44,9 @@ Bundle 'scrooloose/nerdtree.git'
 Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
+Bundle 'thoughtbot/vim-rspec'
+Bundle 'tpope/vim-dispatch'
+
 " Brief help
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install (update) bundles
@@ -75,6 +78,9 @@ python import sys; sys.path.append("/usr/local/lib/python2.7/site-packages")
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
+
+"set rspec command
+let g:rspec_command = "Dispatch rspec {spec}"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Theme/Colors                                                           "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -108,6 +114,7 @@ set smartcase             " ... unless they contain at least one capital letter
 set showmatch
 set vb                    " enable visual bell
 set laststatus=2          " last window always has a statusline
+let g:NERDTreeWinPos = "right"
 "if has('statusline')
 "  set laststatus=2          " last window always has a statusline
 "  set statusline=%<%f\    " Filename
