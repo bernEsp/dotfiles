@@ -1,4 +1,3 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sections:                                                                  "
 "   01. General ................. General Vim behavior                       "
 "   02. Bundle .................. List of pluggins                           "
@@ -16,42 +15,68 @@ set nocompatible         " get rid of Vi compatibility mode. SET FIRST!
 let mapleader=","        " set my leader!
 set backupdir^=~/.vim/_backup//    " where to put backup files.
 set directory^=~/.vim/_temp//
+set path+=**
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*~
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.png,*.jpg,*.gif
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+  set wildignore+=.git\*,.hg\*,.svn\*
+else
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 02. Bundle                                                                 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 filetype off                  " required!
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/vundles/
+call vundle#begin()
 
 " let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
+" required!
+Plugin 'VundleVim/Vundle.vim'
 
 " My bundles here:
 "
 " original repos on GitHub
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'tpope/vim-pathogen'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'tpope/vim-rails.git'
-Bundle 'tpope/vim-rake'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'kien/ctrlp.vim.git'
-Bundle 'rking/ag.vim.git'
-Bundle 'airblade/vim-gitgutter.git'
-Bundle 'scrooloose/nerdtree.git'
-Bundle 'sunaku/vim-ruby-minitest'
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'thoughtbot/vim-rspec'
-Bundle 'tpope/vim-dispatch'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-pathogen'
+Plugin 'tpope/vim-rails.git'
+Plugin 'tpope/vim-rake'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'kien/ctrlp.vim.git'
+Plugin 'rking/ag.vim.git'
+Plugin 'airblade/vim-gitgutter.git'
+Plugin 'scrooloose/nerdtree.git'
+Plugin 'sunaku/vim-ruby-minitest'
+Plugin 'L9'
+Plugin 'FuzzyFinder'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'tpope/vim-dispatch'
+Plugin 'antlypls/vim-colors-codeschool'
+Plugin 'burnettk/vim-angular'
+Plugin 'pangloss/vim-javascript'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'jez/vim-github-hub'
 
+call vundle#end()
 " Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
+" :PluginList          - list configured bundles
+" :PluginInstall(!)    - install (update) bundles
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused bundles
 "
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
@@ -59,35 +84,31 @@ Bundle 'tpope/vim-dispatch'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 03. Events                                                                 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-execute pathogen#infect()
 syntax on
 filetype plugin indent on " filetype detection[ON] plugin[ON] indent[ON]
-
-" In Makefiles DO NOT use spaces instead of tabs
-autocmd FileType make setlocal noexpandtab
+"set rspec command
+let g:rspec_command = "Dispatch rspec {spec}"
+" open nerd tree if exist
 " In Ruby files, use 2 spaces instead of 4 for tabs
 autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 " open nerd tree if exist
 autocmd vimenter * if !argc() | NERDTree | endif
 " stick to vim closes if close
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q
-"Auto-clean fugitive buffers
-
-"set rspec command
-let g:rspec_command = "Dispatch rspec {spec}"
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype *
+      \ if &omnifunc == "" |
+      \ setlocal omnifunc=syntaxcomplete#Complete |
+      \ endif
+endif
+" delete trailining whitespaces
+autocmd BufWritePre * %s/\s\+$//e
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 04. Theme/Colors                                                           "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set t_Co=256              " enable 256-color mode.
-syntax enable             " enable syntax highlighting (previously syntax on).
-colorscheme codeschool       " set colorscheme
-set colorcolumn=85
-
-" Prettify JSON files
-autocmd BufRead,BufNewFile *.json set filetype=json
-autocmd Syntax json sou ~/.vim/syntax/json.vim
-" Prettify Vagrantfile
-autocmd BufRead,BufNewFile Vagrantfile set filetype=ruby
+set t_Co=256
+colorscheme codeschool    " set colorscheme
+set colorcolumn=80
 
 " Highlight characters that go over 80 columns
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
@@ -109,21 +130,6 @@ set showmatch
 set vb                    " enable visual bell
 set laststatus=2          " last window always has a statusline
 let g:NERDTreeWinPos = "right"
-"if has('statusline')
-"  set laststatus=2          " last window always has a statusline
-"  set statusline=%<%f\    " Filename
-"  set statusline+=%w%h%m%r " Options
-"  set statusline+=%{fugitive#statusline()} "  Git Hotness
-"  set statusline+=\ [%{&ff}/%Y]            " filetype
-"  set statusline+=\ [%{getcwd()}]          " current dir
-"  set statusline+=%#warningmsg#
-"  set statusline+=%{SyntasticStatuslineFlag()}
-"  set statusline+=%*
-"  let g:syntastic_enable_signs=1
-"  set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-"endif
-"set statusline=%{fugitive#statusline()}\
-"set statusline+=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\ \ \ %h%m%r%{fugitive#statusline()}%=%-40.(%l,%c%V%)\ %P
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 05. Mapping                                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -132,10 +138,10 @@ nnoremap <silent> <C-Right> <c-w>l
 nnoremap <silent> <C-Left> <c-w>h
 nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+nnoremap <Up> <NOP>
+nnoremap <Down> <NOP>
+nnoremap <Left> <NOP>
+nnoremap <Right> <NOP>
 map <leader>l :wincmd l<CR>
 map <leader>k :wincmd k<CR>
 map <leader>j :wincmd j<CR>
@@ -155,7 +161,6 @@ set expandtab             " use spaces instead of tabs
 set smarttab              " use tabs at the start of a line, spaces elsewhere
 set nowrap                " don't wrap text
 set backspace=indent,eol,start
-set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 set textwidth=79
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrlp set up                                                              "
@@ -164,22 +169,25 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'dir':  '\v[\/](\.(git|hg|svn))|(coverage|coverage_old|dist|bin|node_modules|coverage-old)$',
   \ 'file': '\v\.(exe|so|dll)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
 let g:ctrlp_dont_split = 'nerdtree'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Rails vim set up                                                         "
+" Angular vim set up                                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType cucumber compiler cucumber | setl makeprg=cucumber\ \"%:p\"
-autocmd FileType ruby
-      \ if expand('%') =~# '_test\.rb$' |
-      \   compiler rubyunit | setl makeprg=testrb\ \"%:p\" |
-      \ elseif expand('%') =~# '_spec\.rb$' |
-      \   compiler rspec | setl makeprg=rspec\ \"%:p\" |
-      \ else |
-      \   compiler ruby | setl makeprg=ruby\ -wc\ \"%:p\" |
-      \ endif
-autocmd User Bundler
-      \ if &makeprg !~# 'bundle' | setl makeprg^=bundle\ exec\  | endif
+let g:angular_source_directory = ['src/']
+let g:angular_test_directory = ['tests/unit']
+let g:angular_find_ignore = ['build/', 'dist/', 'node_modules/', 'coverage/', 'bin/', 'coverage-old/']
+let g:angular_jasmine_version = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" pangloss/vim-javascript vim set up                                       "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Javascripts Libraries syntax                                             "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:used_javascript_libs = 'angularjs,angularui,angularuirouter,requirejs,jasmine'
