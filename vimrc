@@ -153,6 +153,7 @@ let g:ctrlp_cmd = 'CtrlP'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent            " auto-indent
 set encoding=utf-8        " enconding with utf-8
+set fileencoding=utf-8    " force file enconding to utf-8 and mitigate issues
 set tabstop=2             " tab spacing
 set softtabstop=2         " unify
 set shiftwidth=2         " indent/outdent by 2 columns
